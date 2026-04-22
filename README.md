@@ -1,52 +1,67 @@
-# Controle de Temperatura para Armazenamento de Vinhos
+# Sistema de Monitoramento de Luminosidade para Vinheria Agnello
 
-## Participantes 
-Guilherme Cunha Romano RM:569301 
-Matheus Sá Teles de Souza RM:571719
-Pedro Antônio RM: 572549
-Guilherme Alvejan RM:570835
+## Participantes
+- Guilherme Cunha Romano — RM: 569301  
+- Matheus Sá Teles de Souza — RM: 571719  
+- Pedro Antônio — RM: 572549  
+- Guilherme Alvejan — RM: 570835  
 
-## Descrição
-Este projeto consiste em um sistema de controle de temperatura voltado para o armazenamento adequado de vinhos. O sistema utiliza três indicadores luminosos (LEDs) para representar visualmente o estado da temperatura do ambiente, de acordo com faixas recomendadas para conservação do produto.
+## Descrição do Projeto
+Este projeto consiste no desenvolvimento de um sistema de monitoramento da luminosidade do ambiente da Vinheria Agnello, com o objetivo de garantir condições adequadas para o armazenamento de vinhos.
 
-O projeto foi desenvolvido em C++ utilizando a plataforma Arduino e simulado no ambiente Wokwi.
+O sistema utiliza um Arduino em conjunto com um sensor LDR para realizar a leitura da intensidade luminosa do ambiente. Com base nesses valores, o estado do ambiente é indicado por meio de sinais visuais (LEDs) e sinal sonoro (buzzer).
+
+A simulação foi desenvolvida e testada na plataforma Wokwi.
 
 ## Objetivo
-Simular o comportamento térmico de um ambiente de armazenamento de vinhos e indicar, por meio de LEDs, se a temperatura está:
-- Ideal
-- Em estado de alerta
-- Inadequada
+Monitorar a luminosidade do ambiente e indicar seu estado por meio de LEDs, classificando-o em três níveis:
 
-Além disso, o sistema simula uma fase inicial de instabilidade térmica e, após um período, passa a operar apenas dentro da faixa ideal, representando a estabilização do ambiente.
+- Condição adequada
+- Nível de alerta
+- Condição crítica
 
-## Funcionamento Geral
-O sistema opera em duas fases:
-1. Fase inicial: a temperatura varia entre valores que representam condições de alerta ou inadequadas.
-2. Fase estabilizada: a temperatura passa a variar somente dentro da faixa ideal para armazenamento de vinhos.
+Quando o ambiente se encontra em condição crítica, o sistema emite também um alerta sonoro por meio de um buzzer.
 
-A cada ciclo, o sistema avalia o valor da temperatura simulada e aciona apenas um LED correspondente ao estado atual.
+## Funcionamento do Sistema
+O sensor LDR realiza a leitura contínua da luminosidade do ambiente. De acordo com o valor obtido, o sistema aciona apenas um LED por vez, indicando o estado atual:
 
-## Faixas de Temperatura Utilizadas
-As faixas de temperatura adotadas no projeto são baseadas em recomendações comuns para armazenamento de vinhos:
+- LED verde: indica que a luminosidade está dentro dos níveis ideais.
+- LED amarelo: indica um nível de alerta.
+- LED vermelho: indica uma condição crítica.
 
-- Temperatura ideal (LED verde): entre 12 °C e 15 °C
-- Situação de alerta (LED amarelo): acima de 15 °C até 18 °C
-- Temperatura inadequada (LED vermelho): abaixo de 12 °C ou acima de 18 °C
+Quando o LED vermelho é acionado, o buzzer emite um sinal sonoro por 3 segundos, alertando sobre a condição crítica do ambiente.
+
+## Critérios de Luminosidade
+A luminosidade é classificada em três estados:
+
+- Condição adequada (LED verde): luminosidade dentro do intervalo ideal.
+- Nível de alerta (LED amarelo): luminosidade fora do ideal, porém ainda aceitável.
+- Condição crítica (LED vermelho): luminosidade excessivamente alta ou baixa.
+
+Os limites de cada faixa podem ser ajustados diretamente no código conforme a necessidade do projeto.
 
 ## Componentes Utilizados
 - Arduino Uno
+- Sensor LDR
 - LED verde
 - LED amarelo
 - LED vermelho
-- Três resistores de 220 ohms
-- Simulador Wokwi
-
-Não é utilizado sensor físico de temperatura. A variação térmica é simulada diretamente por software para fins didáticos.
+- Resistores
+- Buzzer
+- Plataforma de simulação Wokwi
 
 ## Linguagem e Ferramentas
 - Linguagem: C++
 - Plataforma: Arduino
 - Simulador: Wokwi
 
-## Justificativa da Simulação
-A simulação da temperatura por software permite representar o processo de estabilização térmica de forma controlada e previsível, o que é adequado para ambientes educacionais e estudos conceituais de sistemas embarcados.
+## Como Reproduzir o Projeto
+1. Acesse a plataforma Wokwi.
+2. Crie um novo projeto utilizando o Arduino Uno.
+3. Monte o circuito conectando:
+   - O sensor LDR a uma porta analógica.
+   - Os LEDs às portas digitais, utilizando resistores.
+   - O buzzer a uma porta digital.
+4. Insira o código-fonte do projeto no editor.
+5. Inicie a simulação.
+6. Varie a luminosidade do LDR para observar a alternância dos LEDs e o acionamento do buzzer na condição crítica.
