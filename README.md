@@ -6,62 +6,84 @@
 - Pedro Antônio — RM: 572549  
 - Guilherme Alvejan — RM: 570835  
 
-## Descrição do Projeto
-Este projeto consiste no desenvolvimento de um sistema de monitoramento da luminosidade do ambiente da Vinheria Agnello, com o objetivo de garantir condições adequadas para o armazenamento de vinhos.
 
-O sistema utiliza um Arduino em conjunto com um sensor LDR para realizar a leitura da intensidade luminosa do ambiente. Com base nesses valores, o estado do ambiente é indicado por meio de sinais visuais (LEDs) e sinal sonoro (buzzer).
 
-A simulação foi desenvolvida e testada na plataforma Wokwi.
+##  Descrição do Projeto
 
-## Objetivo
-Monitorar a luminosidade do ambiente e indicar seu estado por meio de LEDs, classificando-o em três níveis:
+Este projeto consiste em um **sistema de monitoramento de luminosidade** utilizando **Arduino Uno** e um **sensor LDR (Light Dependent Resistor)**.  
+O sistema foi desenvolvido para atender ao desafio proposto no contexto de uma **vinheria**, onde a qualidade do vinho pode ser afetada pelas condições de iluminação do ambiente.
 
-- Condição adequada
-- Nível de alerta
-- Condição crítica
+Com base na luminosidade medida, o sistema sinaliza três estados diferentes por meio de **LEDs** e um **buzzer**, facilitando a identificação de situações normais, de atenção ou de risco.
 
-Quando o ambiente se encontra em condição crítica, o sistema emite também um alerta sonoro por meio de um buzzer.
+---
 
-## Funcionamento do Sistema
-O sensor LDR realiza a leitura contínua da luminosidade do ambiente. De acordo com o valor obtido, o sistema aciona apenas um LED por vez, indicando o estado atual:
+##  Objetivo
 
-- LED verde: indica que a luminosidade está dentro dos níveis ideais.
-- LED amarelo: indica um nível de alerta.
-- LED vermelho: indica uma condição crítica.
+- Medir a **luminosidade do ambiente** utilizando um sensor LDR  
+- Converter o sinal analógico usando o **conversor A/D do Arduino**  
+- Indicar visualmente o estado do ambiente através de LEDs  
+- Emitir um **alerta sonoro** quando a luminosidade estiver em nível de risco  
 
-Quando o LED vermelho é acionado, o buzzer emite um sinal sonoro por 3 segundos, alertando sobre a condição crítica do ambiente.
+---
 
-## Critérios de Luminosidade
-A luminosidade é classificada em três estados:
+##  Funcionamento do Sistema
 
-- Condição adequada (LED verde): luminosidade dentro do intervalo ideal.
-- Nível de alerta (LED amarelo): luminosidade fora do ideal, porém ainda aceitável.
-- Condição crítica (LED vermelho): luminosidade excessivamente alta ou baixa.
+O Arduino realiza a leitura do sensor LDR por meio da entrada analógica **A0**.  
+O valor lido varia de **0 a 1023**, de acordo com a intensidade da luz no ambiente.
 
-Os limites de cada faixa podem ser ajustados diretamente no código conforme a necessidade do projeto.
+Com base nesse valor, o sistema trabalha com três níveis:
 
-## Componentes Utilizados
-- Arduino Uno
-- Sensor LDR
-- LED verde
-- LED amarelo
-- LED vermelho
-- Resistores
-- Buzzer
-- Plataforma de simulação Wokwi
+| Luminosidade | Estado | Indicação |
+|-------------|-------|-----------|
+| Baixa (< 300) | OK | 🟢 LED Verde |
+| Média (300–699) | Atenção | 🟡 LED Amarelo |
+| Alta (≥ 700) | Risco | 🔴 LED Vermelho + 🔊 Buzzer |
 
-## Linguagem e Ferramentas
-- Linguagem: C++
-- Plataforma: Arduino
-- Simulador: Wokwi
+Quando o estado é **Risco**, o **buzzer é acionado por 3 segundos**.  
+Caso a luminosidade continue elevada, o alarme volta a tocar.
 
-## Como Reproduzir o Projeto
-1. Acesse a plataforma Wokwi.
-2. Crie um novo projeto utilizando o Arduino Uno.
-3. Monte o circuito conectando:
-   - O sensor LDR a uma porta analógica.
-   - Os LEDs às portas digitais, utilizando resistores.
-   - O buzzer a uma porta digital.
-4. Insira o código-fonte do projeto no editor.
-5. Inicie a simulação.
-6. Varie a luminosidade do LDR para observar a alternância dos LEDs e o acionamento do buzzer na condição crítica.
+---
+
+##  Componentes Utilizados
+
+- Arduino Uno  
+- Protoboard  
+- Sensor LDR (luminosidade)  
+- Resistor 10kΩ (divisor de tensão do LDR)  
+- 3 LEDs (verde, amarelo e vermelho)  
+- 3 resistores de 220Ω (para os LEDs)  
+- Buzzer  
+- Jumpers  
+
+---
+
+##  Organização dos Pinos
+
+| Componente | Pino Arduino |
+|----------|--------------|
+| LDR | A0 |
+| LED Verde (OK) | 8 |
+| LED Amarelo (Atenção) | 9 |
+| LED Vermelho (Risco) | 10 |
+| Buzzer | 6 |
+| Alimentação | 5V e GND |
+
+-
+## Testes
+
+- Cobrir o LDR → LED Verde aceso  
+- Ambiente parcialmente iluminado → LED Amarelo aceso  
+- Luz intensa (ex: lanterna do celular) → LED Vermelho + Buzzer  
+
+---
+
+##  Conclusão
+
+Este sistema demonstra de forma prática:
+- O uso de sensores analógicos  
+- A conversão Analógico-Digital do Arduino  
+- A automação de alertas visuais e sonoros  
+
+Trata-se de uma solução simples, eficaz e didática para monitoramento ambiental, podendo ser facilmente expandida para incluir sensores de temperatura e umidade.
+
+---
