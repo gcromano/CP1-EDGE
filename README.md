@@ -1,89 +1,156 @@
-# Sistema de Monitoramento de Luminosidade para Vinheria Agnello
-
-## Participantes
-- Guilherme Cunha Romano — RM: 569301  
-- Matheus Sá Teles de Souza — RM: 571719  
-- Pedro Antônio — RM: 572549  
-- Guilherme Alvejan — RM: 570835  
+#  Vinheria Agnello - Monitoramento Inteligente
 
 
-
-##  Descrição do Projeto
-
-Este projeto consiste em um **sistema de monitoramento de luminosidade** utilizando **Arduino Uno** e um **sensor LDR (Light Dependent Resistor)**.  
-O sistema foi desenvolvido para atender ao desafio proposto no contexto de uma **vinheria**, onde a qualidade do vinho pode ser afetada pelas condições de iluminação do ambiente.
-
-Com base na luminosidade medida, o sistema sinaliza três estados diferentes por meio de **LEDs** e um **buzzer**, facilitando a identificação de situações normais, de atenção ou de risco.
+O sistema tem como objetivo monitorar as condições ideais de armazenamento de vinhos, analisando temperatura, umidade e luminosidade, garantindo a qualidade do ambiente.
 
 ---
 
-##  Objetivo
+##  Integrantes
 
-- Medir a **luminosidade do ambiente** utilizando um sensor LDR  
-- Converter o sinal analógico usando o **conversor A/D do Arduino**  
-- Indicar visualmente o estado do ambiente através de LEDs  
-- Emitir um **alerta sonoro** quando a luminosidade estiver em nível de risco  
-
----
-
-##  Funcionamento do Sistema
-
-O Arduino realiza a leitura do sensor LDR por meio da entrada analógica **A0**.  
-O valor lido varia de **0 a 1023**, de acordo com a intensidade da luz no ambiente.
-
-Com base nesse valor, o sistema trabalha com três níveis:
-
-| Luminosidade | Estado | Indicação |
-|-------------|-------|-----------|
-| Baixa (< 300) | OK | 🟢 LED Verde |
-| Média (300–699) | Atenção | 🟡 LED Amarelo |
-| Alta (≥ 700) | Risco | 🔴 LED Vermelho + 🔊 Buzzer |
-
-Quando o estado é **Risco**, o **buzzer é acionado por 3 segundos**.  
-Caso a luminosidade continue elevada, o alarme volta a tocar.
+- Matheus Sá Teles  RM:571719
+- Pedro Antônio RM: 572549 
+- Guilherme Cunha Romano  RM: 569301
+- Guilherme Alvejan RM: 570835 
 
 ---
 
-##  Componentes Utilizados
+##  Componentes utilizados
+
+- Arduino (C/C++)
+- Sensor DHT22 (temperatura e umidade)
+- Sensor LDR (luminosidade)
+- Display LCD I2C
+- LEDs (verde, amarelo e vermelho)
+- Buzzer
+- VS Code
+- Git e GitHub
+
+---
+
+##  Funcionamento do sistema
+
+O sistema realiza leituras dos sensores a cada 5 segundos e avalia as condições ambientais.
+
+Com base nos dados coletados, ele classifica o ambiente em três níveis:
+
+###  Status OK (LED Verde)
+- Temperatura entre 10°C e 15°C  
+- Umidade entre 50% e 70%  
+- Baixa luminosidade  
+
+---
+
+###  Alerta (LED Amarelo + buzzer leve)
+- Temperatura fora do ideal OU  
+- Luminosidade moderada  
+
+---
+
+###  Crítico (LED Vermelho + buzzer forte)
+- Umidade fora do ideal OU  
+- Luminosidade muito alta  
+
+---
+
+##  Sensores utilizados
+
+###  DHT22
+- Mede temperatura e umidade
+- Conectado ao pino digital 7
+
+###  LDR (Sensor de luz)
+- Conectado ao pino analógico A0
+- Valores utilizados:
+  - Até 400 → Ambiente escuro (ideal)
+  - 401 a 700 → Meia luz (alerta)
+  - Acima de 700 → Muito claro (crítico)
+
+---
+
+##  Display LCD
+
+O display alterna automaticamente entre 3 telas:
+
+1. Luminosidade
+2. Temperatura
+3. Umidade
+
+A troca acontece a cada 2,5 segundos.
+
+---
+
+##  Estrutura do Hardware
+
+Componentes utilizados:
 
 - Arduino Uno  
-- Protoboard  
-- Sensor LDR (luminosidade)  
-- Resistor 10kΩ (divisor de tensão do LDR)  
-- 3 LEDs (verde, amarelo e vermelho)  
-- 3 resistores de 220Ω (para os LEDs)  
+- Breadboard  
+- 3 LEDs (verde, amarelo, vermelho)  
+- Resistores  
+- Sensor DHT22  
+- Sensor LDR  
 - Buzzer  
-- Jumpers  
+- Display LCD I2C  
+
+### Ligações principais:
+
+- LEDs:
+  - Verde → pino 2  
+  - Amarelo → pino 3  
+  - Vermelho → pino 4  
+
+- Buzzer → pino 5  
+- DHT22 → pino 7  
+- LDR → A0  
+- LCD I2C → SDA/SCL  
 
 ---
 
-##  Organização dos Pinos
+##  Lógica do sistema
 
-| Componente | Pino Arduino |
-|----------|--------------|
-| LDR | A0 |
-| LED Verde (OK) | 8 |
-| LED Amarelo (Atenção) | 9 |
-| LED Vermelho (Risco) | 10 |
-| Buzzer | 6 |
-| Alimentação | 5V e GND |
+O sistema:
 
--
-## Testes
-
-- Cobrir o LDR → LED Verde aceso  
-- Ambiente parcialmente iluminado → LED Amarelo aceso  
-- Luz intensa (ex: lanterna do celular) → LED Vermelho + Buzzer  
+1. Realiza múltiplas leituras (5 leituras para maior precisão)
+2. Calcula média dos valores
+3. Verifica limites definidos
+4. Atualiza:
+   - LEDs
+   - Buzzer
+   - Display LCD
 
 ---
 
-##  Conclusão
+##  Organização do código
 
-Este sistema demonstra de forma prática:
-- O uso de sensores analógicos  
-- A conversão Analógico-Digital do Arduino  
-- A automação de alertas visuais e sonoros  
+Principais funções:
 
-Trata-se de uma solução simples, eficaz e didática para monitoramento ambiental, podendo ser facilmente expandida para incluir sensores de temperatura e umidade.
+- `fazerLeituras()` → coleta dados dos sensores  
+- `atualizarIndicadores()` → controla LEDs e buzzer  
+- `mostrarTela()` → alterna informações no display  
+- `mostrarLuminosidade()`  
+- `mostrarTemperatura()`  
+- `mostrarUmidade()`  
 
 ---
+
+## ▶️ Como executar o projeto
+
+1. Conectar os componentes conforme o esquema
+2. Abrir o código no VS Code / Arduino IDE
+3. Instalar bibliotecas:
+   - `LiquidCrystal_I2C`
+   - `DHT sensor library`
+4. Selecionar a placa Arduino Uno
+5. Fazer upload do código
+
+---
+
+##  Observações
+
+- O sistema realiza média das leituras para evitar variações bruscas
+- Caso o sensor DHT falhe, o LCD exibirá mensagem de erro
+- Projeto voltado para simulação de controle ambiental em vinherias
+
+
+
+
